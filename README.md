@@ -18,7 +18,7 @@ The reported figures indicate that the model achieved an accuracy of 99% for twe
 ![Screenshot (49)](https://github.com/Karunya003/Depression_Detection_from_Twitter_post/assets/85503646/90ff6970-abb6-415c-b6c6-9ca6452129be)
 <div></div>
 
-<div class="cell markdown" id="siqSAr_aOrf0">
+<div class="cell markdown" id="output">
 
 ## Output:
 
