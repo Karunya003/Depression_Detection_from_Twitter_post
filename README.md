@@ -17,19 +17,11 @@ The reported figures indicate that the model achieved an accuracy of 99% for twe
 ![Screenshot (48)](https://github.com/Karunya003/Depression_Detection_from_Twitter_post/assets/85503646/7004a6bb-cc7e-4f9b-996d-0059b6439db9)
 ![Screenshot (49)](https://github.com/Karunya003/Depression_Detection_from_Twitter_post/assets/85503646/90ff6970-abb6-415c-b6c6-9ca6452129be)
 <div></div>
+
 <div class="cell markdown" id="siqSAr_aOrf0">
+
 ## Output:
-  
+
 ![model accuracy](https://github.com/Karunya003/Depression_Detection_from_Twitter_post/assets/85503646/32112381-6088-4d24-95ce-5deed0e117ad)
 ![model loss](https://github.com/Karunya003/Depression_Detection_from_Twitter_post/assets/85503646/ad0fa430-7755-4031-a7ab-afff5b66f300)
-</div>
-<div class="cell markdown" id="siqSAr_aOrf0">
-
-## Summary:
-
-This Notebook build a deep learning project to colorize black and white
-images. It first introduces us to Lab color space and why it is
-favorable for our problem statement. Then step by step it describes how
-to implement black and white image colorizer.
-
 </div>
