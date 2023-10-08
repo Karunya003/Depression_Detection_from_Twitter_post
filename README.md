@@ -20,8 +20,8 @@ The project employs a model architecture combining LSTM (Long Short-Term Memory)
 <div class="cell code" data-execution_count="1" id="import">
  In this section, necessary Python libraries and modules are imported. These libraries include:
 
-*warnings: Used to manage and suppress warning messages.
-*ftfy: A library for fixing Unicode text.
+* warnings: Used to manage and suppress warning messages.
+* ftfy: A library for fixing Unicode text.
 *matplotlib.pyplot: Used for creating plots and graphs.
 *nltk: The Natural Language Toolkit for text processing.
 *numpy: A library for numerical computations.
