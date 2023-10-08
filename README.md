@@ -29,7 +29,7 @@ The project employs a model architecture combining LSTM (Long Short-Term Memory)
 * **re:** Regular expression module for text processing.
 * Various modules from **Keras** for building deep learning models.
 * Modules from **scikit-learn (sklearn)** for machine learning.
-* ``` from Gensim for working with pre-trained word embeddings.
+* **KeyedVectors** from Gensim for working with pre-trained word embeddings.
 
 ``` python
 import warnings
@@ -122,7 +122,7 @@ Text preprocessing functions are defined to clean and preprocess tweet text.
 Tweets are cleaned to remove URLs, hashtags, mentions, emojis, and punctuation. Contractions are expanded, stop words are removed, and words are stemmed.
 Tokenization and sequence padding are performed on the cleaned tweets using Keras' Tokenizer and pad_sequences functions.
 
-'''python
+``` python
 def expandContractions(text, c_re=c_re):
     def replace(match):
         return cList[match.group(0)]
@@ -181,7 +181,7 @@ data_d = pad_sequences(sequences_d, maxlen=MAX_SEQUENCE_LENGTH)
 data_r = pad_sequences(sequences_r, maxlen=MAX_SEQUENCE_LENGTH)
 print('Shape of data_d tensor:', data_d.shape)
 print('Shape of data_r tensor:', data_r.shape)
-'''
+``` 
 </div>
 
 The reported figures indicate that the model achieved an accuracy of 99% for tweets that do not indicate depression (labeled as zeros) and 97% for tweets that suggest depression (labeled as ones). These high accuracy scores suggest that the model is performing well in distinguishing between the two categories of tweets.
