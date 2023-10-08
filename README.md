@@ -184,12 +184,36 @@ print('Shape of data_r tensor:', data_r.shape)
 ``` 
 </div>
 
-<div class="cell markdown" id="loading">
-
+<div class="cell markdown" id="model">
+  
 ### Model Construction 
 
 </div>
-<div class="cell code" data-execution_count="5" data-colab="{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}" id="model" data-outputId="f4d92e86-eab0-4066-e157-4ec730618d5d">
+<div class="cell code" data-execution_count="5" data-colab="{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}" id="model" data-outputId="model">
+In this section, the deep learning model is constructed using the Keras Sequential API. Here's a breakdown of the model architecture:
+
+**Embedding Layer:**
+
+This layer initializes word embeddings using pre-trained word vectors (embedding_matrix) obtained earlier. It ensures that the word embeddings are fixed during training (set trainable=False).
+input_length is set to MAX_SEQUENCE_LENGTH, which is the maximum sequence length of the padded tweets.
+
+**Convolutional Layer:**
+
+A 1D convolutional layer is added with 32 filters and a kernel size of 3.
+The activation function is ReLU (Rectified Linear Unit).
+padding='same' ensures that the input and output dimensions match.
+Max-pooling is applied with a pool size of 2.
+Dropout with a rate of 0.2 is used for regularization.
+
+**LSTM Layer:**
+
+A Long Short-Term Memory (LSTM) layer with 300 units is added.
+Another dropout layer with a rate of 0.2 is used for regularization.
+
+**Dense Layer:**
+
+A dense layer with a single neuron and a sigmoid activation function is added for binary classification.
+The model is compiled with binary cross-entropy loss and the Nadam optimizer.
 
 ``` python
 # Model Architecture
@@ -210,6 +234,69 @@ model.compile(loss='binary_crossentropy', optimizer='nadam', metrics=['acc'])
 print(model.summary())
 ```
 </div>
+
+<div class="cell markdown" id="train">
+  
+### Model Training
+
+</div>
+<div class="cell code" data-execution_count="6" data-colab="{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}" id="train" data-outputId="train">
+In the training section:
+
+* EarlyStopping is used as a callback to monitor the validation loss (val_loss) and stop training if it does not improve for a specified number of epochs (patience=3).
+* The model.fit() function is called to train the model on the training data (data_train and labels_train) and validate it on the validation data (data_val and labels_val).
+* Training is performed for the specified number of epochs (EPOCHS), with a batch size of 40 and shuffling the data during training.
+
+``` python
+early_stop = EarlyStopping(monitor='val_loss', patience=3)
+
+hist = model.fit(data_train, labels_train, validation_data=(data_val, labels_val), epochs=EPOCHS, batch_size=40, shuffle=True, callbacks=[early_stop])
+```
+</div>
+
+<div class="cell markdown" id="evaluation">
+  
+### Plotting and Model Evaluation
+
+</div>
+<div class="cell code" data-execution_count="7" data-colab="{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}" id="evaluation" data-outputId="evaluation">
+In this section, the code evaluates the trained model and plots the training and validation accuracy and loss curves:
+
+* The training and validation accuracy and loss curves are plotted using Matplotlib.
+* The model is used to predict labels on the test data (data_test), and the predicted labels are rounded to obtain binary predictions.
+* The accuracy of the model is calculated using scikit-learn's accuracy_score function and printed.
+* A classification report is generated and printed, providing additional metrics such as precision, recall, and F1-score for binary classification.
+* These steps allow you to assess the performance of the deep learning model for depression detection based on the provided datasets and settings.
+
+``` python
+# Plotting
+plt.plot(hist.history['acc'])
+plt.plot(hist.history['val_acc'])
+plt.title('model accuracy')
+plt.ylabel('accuracy')
+plt.xlabel('epoch')
+plt.legend(['train', 'validation'], loc='upper left')
+plt.show()
+
+plt.plot(hist.history['loss'])
+plt.plot(hist.history['val_loss'])
+plt.title('model loss')
+plt.ylabel('loss')
+plt.xlabel('epoch')
+plt.legend(['train', 'test'], loc='upper left')
+plt.show()
+
+# Model Evaluation
+labels_pred = model.predict(data_test)
+labels_pred = np.round(labels_pred.flatten())
+accuracy = accuracy_score(labels_test, labels_pred)
+print("Accuracy: %.2f%%" % (accuracy*100))
+
+print(classification_report(labels_test, labels_pred))
+
+```
+</div>
+
 
 The reported figures indicate that the model achieved an accuracy of 99% for tweets that do not indicate depression (labeled as zeros) and 97% for tweets that suggest depression (labeled as ones). These high accuracy scores suggest that the model is performing well in distinguishing between the two categories of tweets.
 
