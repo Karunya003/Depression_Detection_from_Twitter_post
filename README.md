@@ -86,6 +86,7 @@ EPOCHS = 10
 <div class="cell markdown" id="loading">
 
 ### Data Loading and Word Embeddings: 
+
 </div>
 <div class="cell code" data-execution_count="3" id="embedding">
   
@@ -112,6 +113,7 @@ word2vec = KeyedVectors.load_word2vec_format(EMBEDDING_FILE, binary=True)
 <div class="cell markdown" id="loading">
 
 ### Data Loading and Word Embeddings: 
+
 </div>
 <div class="cell code" data-execution_count="3" id="embedding">
 This section focuses on preparing the text data for modeling:
