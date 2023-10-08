@@ -13,3 +13,11 @@ Additionally, the project utilizes pre-trained word vectors for the Word2Vec mod
 The project employs a model architecture combining LSTM (Long Short-Term Memory) and CNN (Convolutional Neural Network). The model takes an input sentence, converts it into embeddings, and passes the resulting embedding vector through a convolutional layer. CNNs are effective at learning spatial structures from data, and this convolutional layer capitalizes on that capability to learn some structure from sequential data. Subsequently, the output of the convolutional layer is fed into a standard LSTM layer. Finally, the LSTM layer's output is processed by a standard Dense model for prediction.
 
 The reported figures indicate that the model achieved an accuracy of 99% for tweets that do not indicate depression (labeled as zeros) and 97% for tweets that suggest depression (labeled as ones). These high accuracy scores suggest that the model is performing well in distinguishing between the two categories of tweets.
+
+![Screenshot (48)](https://github.com/Karunya003/Depression_Detection_from_Twitter_post/assets/85503646/7004a6bb-cc7e-4f9b-996d-0059b6439db9)
+![Screenshot (49)](https://github.com/Karunya003/Depression_Detection_from_Twitter_post/assets/85503646/90ff6970-abb6-415c-b6c6-9ca6452129be)
+
+<div class="cell markdown" id="output">
+![model accuracy](https://github.com/Karunya003/Depression_Detection_from_Twitter_post/assets/85503646/32112381-6088-4d24-95ce-5deed0e117ad)
+![model loss](https://github.com/Karunya003/Depression_Detection_from_Twitter_post/assets/85503646/ad0fa430-7755-4031-a7ab-afff5b66f300)
+</div>
