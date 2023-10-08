@@ -115,7 +115,7 @@ word2vec = KeyedVectors.load_word2vec_format(EMBEDDING_FILE, binary=True)
 ### Data Loading and Word Embeddings: 
 
 </div>
-<div class="cell code" data-execution_count="3" id="embedding">
+<div class="cell code" data-execution_count="4" data-colab="{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}" id="d4IxXTo-Akzj" data-outputId="embedding">
 This section focuses on preparing the text data for modeling:
 
 Text preprocessing functions are defined to clean and preprocess tweet text.
