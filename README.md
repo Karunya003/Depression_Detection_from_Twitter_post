@@ -20,16 +20,16 @@ The project employs a model architecture combining LSTM (Long Short-Term Memory)
 <div class="cell code" data-execution_count="1" id="import">
  In this section, necessary Python libraries and modules are imported. These libraries include:
 
-* warnings: Used to manage and suppress warning messages.
-* ftfy: A library for fixing Unicode text.
-*matplotlib.pyplot: Used for creating plots and graphs.
-*nltk: The Natural Language Toolkit for text processing.
-*numpy: A library for numerical computations.
-*pandas: Used for data manipulation and analysis.
-*re: Regular expression module for text processing.
-*Various modules from Keras for building deep learning models.
-*Modules from scikit-learn (sklearn) for machine learning.
-*KeyedVectors from Gensim for working with pre-trained word embeddings.
+* **warnings:** Used to manage and suppress warning messages.
+* **ftfy:** A library for fixing Unicode text.
+* **matplotlib.pyplot:** Used for creating plots and graphs.
+* **nltk:** The Natural Language Toolkit for text processing.
+* **numpy:** A library for numerical computations.
+* **pandas:** Used for data manipulation and analysis.
+* **re:** Regular expression module for text processing.
+* Various modules from **Keras** for building deep learning models.
+* Modules from **scikit-learn (sklearn)** for machine learning.
+* ``` from Gensim for working with pre-trained word embeddings.
 
 ``` python
 import warnings
@@ -62,12 +62,12 @@ np.random.seed(1234)
 ```
 </div>
 
-<div class="cell markdown" id="hu-I5bAeOCHp">
+<div class="cell markdown" id="constant">
 
 ### Constants and Hyperparameters
 
 </div>
-<div class="cell code" data-execution_count="1" id="import">
+<div class="cell code" data-execution_count="2" id="con">
 This section defines various constants and hyperparameters used throughout the code. These include the number of rows to read from datasets, the maximum sequence length for tweets, the maximum number of words in the tokenizer, embedding dimensions, train-test split ratios, learning rate, and the number of training epochs.
 
 ``` python
@@ -81,6 +81,105 @@ TEST_SPLIT = 0.2
 LEARNING_RATE = 0.1
 EPOCHS = 10
 ```
+</div>
+
+<div class="cell markdown" id="loading">
+
+### Data Loading and Word Embeddings: 
+</div>
+<div class="cell code" data-execution_count="3" id="embedding">
+  
+**Data Loading:**
+  The code loads two datasets: 
+  * depressive_tweets_processed.csv for depressive tweets 
+  * Sentiment Analysis Dataset 2.csv for random tweets. 
+  These datasets are read into Pandas DataFrames.
+
+**Word Embeddings:** Word embeddings are loaded from the pre-trained Word2Vec model stored in the EMBEDDING_FILE. These embeddings are used to initialize the embedding layer of the neural network model.
+
+``` python
+# Data Loading
+df = 'depressive_tweets_processed.csv'
+RANDOM_TWEETS_CSV = 'Sentiment Analysis Dataset 2.csv'
+depressive_tweets_df = pd.read_csv(df, sep='|', header=None, usecols=range(0,9), nrows=DEPRES_NROWS)
+random_tweets_df = pd.read_csv(RANDOM_TWEETS_CSV, encoding="ISO-8859-1", usecols=range(0,4), nrows=RANDOM_NROWS)
+# Word Embeddings
+EMBEDDING_FILE = 'GoogleNews-vectors-negative300.bin'
+word2vec = KeyedVectors.load_word2vec_format(EMBEDDING_FILE, binary=True)
+```
+</div>
+
+<div class="cell markdown" id="loading">
+
+### Data Loading and Word Embeddings: 
+</div>
+<div class="cell code" data-execution_count="3" id="embedding">
+This section focuses on preparing the text data for modeling:
+
+Text preprocessing functions are defined to clean and preprocess tweet text.
+Tweets are cleaned to remove URLs, hashtags, mentions, emojis, and punctuation. Contractions are expanded, stop words are removed, and words are stemmed.
+Tokenization and sequence padding are performed on the cleaned tweets using Keras' Tokenizer and pad_sequences functions.
+
+'''python
+def expandContractions(text, c_re=c_re):
+    def replace(match):
+        return cList[match.group(0)]
+    return c_re.sub(replace, text)
+
+
+def clean_tweets(tweets):
+    cleaned_tweets = []
+    for tweet in tweets:
+        tweet = str(tweet)
+        # if url links then dont append to avoid news articles
+        # also check tweet length, save those > 10 (length of word "depression")
+        if re.match("(\w+:\/\/\S+)", tweet) == None and len(tweet) > 10:
+            # remove hashtag, @mention, emoji and image URLs
+            tweet = ' '.join(
+                re.sub("(@[A-Za-z0-9]+)|(\#[A-Za-z0-9]+)|(<Emoji:.*>)|(pic\.twitter\.com\/.*)", " ", tweet).split())
+
+            # fix weirdly encoded texts
+            tweet = ftfy.fix_text(tweet)
+
+            # expand contraction
+            tweet = expandContractions(tweet)
+
+            # remove punctuation
+            tweet = ' '.join(re.sub("([^0-9A-Za-z \t])", " ", tweet).split())
+
+            # stop words
+            stop_words = set(stopwords.words('english'))
+            word_tokens = nltk.word_tokenize(tweet)
+            filtered_sentence = [w for w in word_tokens if not w in stop_words]
+            tweet = ' '.join(filtered_sentence)
+
+            # stemming words
+            tweet = PorterStemmer().stem(tweet)
+
+            cleaned_tweets.append(tweet)
+
+    return cleaned_tweets
+depressive_tweets_arr = [x for x in depressive_tweets_df[5]]
+random_tweets_arr = [x for x in random_tweets_df['SentimentText']]
+X_d = clean_tweets(depressive_tweets_arr)
+X_r = clean_tweets(random_tweets_arr)
+
+tokenizer = Tokenizer(num_words=MAX_NB_WORDS)
+tokenizer.fit_on_texts(X_d + X_r)
+
+sequences_d = tokenizer.texts_to_sequences(X_d)
+sequences_r = tokenizer.texts_to_sequences(X_r)
+
+
+word_index = tokenizer.word_index
+print('Found %s unique tokens' % len(word_index))
+
+
+data_d = pad_sequences(sequences_d, maxlen=MAX_SEQUENCE_LENGTH)
+data_r = pad_sequences(sequences_r, maxlen=MAX_SEQUENCE_LENGTH)
+print('Shape of data_d tensor:', data_d.shape)
+print('Shape of data_r tensor:', data_r.shape)
+'''
 </div>
 
 The reported figures indicate that the model achieved an accuracy of 99% for tweets that do not indicate depression (labeled as zeros) and 97% for tweets that suggest depression (labeled as ones). These high accuracy scores suggest that the model is performing well in distinguishing between the two categories of tweets.
