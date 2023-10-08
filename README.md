@@ -115,7 +115,7 @@ word2vec = KeyedVectors.load_word2vec_format(EMBEDDING_FILE, binary=True)
 ### Data Loading and Word Embeddings: 
 
 </div>
-<div class="cell code" data-execution_count="4" data-colab="{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}" id="d4IxXTo-Akzj" data-outputId="embedding">
+<div class="cell code" data-execution_count="4" data-colab="{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}" id="embedding" data-outputId="f4d92e86-eab0-4066-e157-4ec730618d5d">
 This section focuses on preparing the text data for modeling:
 
 Text preprocessing functions are defined to clean and preprocess tweet text.
@@ -182,6 +182,33 @@ data_r = pad_sequences(sequences_r, maxlen=MAX_SEQUENCE_LENGTH)
 print('Shape of data_d tensor:', data_d.shape)
 print('Shape of data_r tensor:', data_r.shape)
 ``` 
+</div>
+
+<div class="cell markdown" id="loading">
+
+### Model Construction 
+
+</div>
+<div class="cell code" data-execution_count="5" data-colab="{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}" id="model" data-outputId="f4d92e86-eab0-4066-e157-4ec730618d5d">
+
+``` python
+# Model Architecture
+model = Sequential()
+# Embedded layer
+model.add(Embedding(len(embedding_matrix), EMBEDDING_DIM, weights=[embedding_matrix],
+                            input_length=MAX_SEQUENCE_LENGTH, trainable=False))
+# Convolutional Layer
+model.add(Conv1D(filters=32, kernel_size=3, padding='same', activation='relu'))
+model.add(MaxPooling1D(pool_size=2))
+model.add(Dropout(0.2))
+# LSTM Layer
+model.add(LSTM(300))
+model.add(Dropout(0.2))
+model.add(Dense(1, activation='sigmoid'))
+
+model.compile(loss='binary_crossentropy', optimizer='nadam', metrics=['acc'])
+print(model.summary())
+```
 </div>
 
 The reported figures indicate that the model achieved an accuracy of 99% for tweets that do not indicate depression (labeled as zeros) and 97% for tweets that suggest depression (labeled as ones). These high accuracy scores suggest that the model is performing well in distinguishing between the two categories of tweets.
